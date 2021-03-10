@@ -9,7 +9,7 @@ module "elb" {
   name        = var.name
 
   subnets         = ["subnet-024d03616522c6a61", "subnet-07cb41e7b435c8d73"]
-  security_groups = ["sg-0d25b39d9e7c06452"]
+  security_groups = ["sg-049cb0ce979def91b"]
   internal        = var.internal
 
   cross_zone_load_balancing   = true
