@@ -4,30 +4,36 @@
 module "elb" {
   source = "./modules/elb"
 
-  create_elb = var.create_elb
+  create_elb = true
 
   name        = var.name
-  name_prefix = var.name_prefix
 
-  subnets         = var.subnets
-  security_groups = var.security_groups
+  subnets         = ["subnet-024d03616522c6a61", "subnet-07cb41e7b435c8d73"]
+  security_groups = ["sg-0d25b39d9e7c06452"]
   internal        = var.internal
 
-  cross_zone_load_balancing   = var.cross_zone_load_balancing
-  idle_timeout                = var.idle_timeout
-  connection_draining         = var.connection_draining
-  connection_draining_timeout = var.connection_draining_timeout
+  cross_zone_load_balancing   = true
+  idle_timeout                = 60
+  connection_draining         = false
+  connection_draining_timeout = 300
 
-  listener     = var.listener
-  access_logs  = var.access_logs
-  health_check = var.health_check
-
-  tags = merge(
-    var.tags,
+  listener = [
     {
-      "Name" = format("%s", var.name)
-    },
-  )
+      instance_port     = "8200"
+      instance_protocol = "HTTP"
+      lb_port           = "80"
+      lb_protocol       = "HTTP"
+    }
+  ]
+
+  health_check = {
+    target              = "HTTP:8200/v1/sys/health"
+    interval            = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+  }
+
 }
 
 #################
@@ -36,9 +42,9 @@ module "elb" {
 module "elb_attachment" {
   source = "./modules/elb_attachment"
 
-  create_attachment = var.create_elb
+  create_attachment = true
 
-  number_of_instances = var.number_of_instances
+  number_of_instances = 1
 
   elb       = module.elb.this_elb_id
   instances = var.instances

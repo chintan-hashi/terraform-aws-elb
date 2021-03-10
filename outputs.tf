@@ -27,8 +27,3 @@ output "this_elb_source_security_group_id" {
   description = "The ID of the security group that you can use as part of your inbound rules for your load balancer's back-end application instances"
   value       = module.elb.this_elb_source_security_group_id
 }
-
-output "this_elb_zone_id" {
-  description = "The canonical hosted zone ID of the ELB (to be used in a Route 53 Alias record)"
-  value       = module.elb.this_elb_zone_id
-}
