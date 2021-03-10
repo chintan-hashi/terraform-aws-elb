@@ -5,11 +5,6 @@ variable "name" {
 }
 
 
-variable "subnets" {
-  description = "A list of subnet IDs to attach to the ELB"
-  type        = list(string)
-}
-
 variable "internal" {
   description = "If true, ELB will be an internal ELB"
   type        = bool
